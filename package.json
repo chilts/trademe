@@ -1,0 +1,8 @@
+{
+  "name": "trademe",
+  "version": "0.1.0",
+  "description": "Client for the TradeMe (trademe.co.nz) API.",
+  "dependencies": {
+    "request": "^2.70.0"
+  }
+}
