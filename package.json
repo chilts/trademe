@@ -1,5 +1,5 @@
 {
-  "name": "trademe",
+  "name": "@chilts/trademe",
   "version": "0.1.0",
   "description": "Client for the TradeMe (trademe.co.nz) API.",
   "dependencies": {
