@@ -38,6 +38,15 @@ function Client(opts) {
   }.bind(this))
 }
 
+Client.prototype.oauth = function oauth() {
+  return {
+    consumer_key    : this.consumerKey,
+    consumer_secret : this.consumerSecret,
+    token           : this.oauthToken,
+    token_secret    : this.oauthTokenSecret,
+  }
+}
+
 // --- Catalogue Methods ---
 
 Client.prototype.SiteStats = function SiteStats(callback) {
@@ -45,6 +54,7 @@ Client.prototype.SiteStats = function SiteStats(callback) {
 
   var args = {
     url  : url,
+    body : {},
     json : true,
   }
   request.get(args, function (err, res, data) {
@@ -57,17 +67,10 @@ Client.prototype.SiteStats = function SiteStats(callback) {
 Client.prototype.MyTradeMe_Summary = function MyTradeMe_Summary(callback) {
   var url = this.baseUrl + 'MyTradeMe/Summary.json'
 
-  var oauth = {
-    consumer_key    : this.consumerKey,
-    consumer_secret : this.consumerSecret,
-    token           : this.oauthToken,
-    token_secret    : this.oauthTokenSecret,
-  }
-
   var args = {
     url   : url,
-    oauth : oauth,
-    qs    : {
+    oauth : this.oauth(),
+    body  : {
       return_member_profile : true, // true or false
       // return_member_profile : false, // true or false
     },
@@ -84,13 +87,6 @@ Client.prototype.MyTradeMe_Summary = function MyTradeMe_Summary(callback) {
 Client.prototype.Listings_Hot = function Listings_Hot(callback) {
   var url = this.baseUrl + 'Listings/Hot.json'
 
-  var oauth = {
-    consumer_key    : this.consumerKey,
-    consumer_secret : this.consumerSecret,
-    token           : this.oauthToken,
-    token_secret    : this.oauthTokenSecret,
-  }
-
   // Check some of the incoming args:
   // * buy         :
   // * clearance   :
@@ -104,10 +100,153 @@ Client.prototype.Listings_Hot = function Listings_Hot(callback) {
 
   var args = {
     url   : url,
-    oauth : oauth,
-    qs    : {
+    oauth : this.oauth(),
+    body    : {
       // ToDo: ...?
     },
+    json  : true,
+  }
+
+  request.get(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+// --- Selling Methods ---
+
+Client.prototype.Selling = function Selling(params, callback) {
+  var url = this.baseUrl + 'Selling.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.post(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+Client.prototype.ValidateListing = function ValidateListing(params, callback) {
+  var url = this.baseUrl + 'Selling/Validate.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.post(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+Client.prototype.Withdraw = function Withdraw(params, callback) {
+  var url = this.baseUrl + 'Selling/Withdraw.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.post(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+// --- Catalogue Methods ---
+
+Client.prototype.CategoryDetails = function CategoryDetails(params, callback) {
+  var url = this.baseUrl + 'Categories/' + params.category + '/Details.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.get(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+// --- My Trade Me ---
+
+Client.prototype.MyTradeMe_Summary = function MyTradeMe_Summary(params, callback) {
+  var url = this.baseUrl + 'MyTradeMe/Summary.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.get(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+Client.prototype.MyTradeMe_SellingItems = function MyTradeMe_SellingItems(params, callback) {
+  var url = this.baseUrl + 'MyTradeMe/SellingItems.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.get(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+Client.prototype.MyTradeMe_SalesSummary = function MyTradeMe_SalesSummary(params, callback) {
+  var url = this.baseUrl + 'MyTradeMe/SalesSummary.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    // body  : params,
+    json  : true,
+  }
+
+  request.get(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+// --- Photo Methods ---
+
+Client.prototype.Photos_Add = function Photos_Add(params, callback) {
+  var url = this.baseUrl + 'Photos/Add.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
+    json  : true,
+  }
+
+  request.post(args, function (err, res, data) {
+    callback(err, res.body)
+  })
+}
+
+Client.prototype.Photos = function Photos(params, callback) {
+  var url = this.baseUrl + 'Photos.json'
+
+  var args = {
+    url   : url,
+    oauth : this.oauth(),
+    body  : params,
     json  : true,
   }
 
